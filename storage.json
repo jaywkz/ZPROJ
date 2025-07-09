@@ -1,0 +1,14 @@
+{
+    "Stats":{
+        "npc":{
+            "gunner":{
+                "npc_type":"unit",
+                "default_sprite":"gunner",
+                "default_size":[50,50]
+            }
+        }
+    },
+    "Solid_Colors":{
+        "background":[0,0,0]
+    }
+}
