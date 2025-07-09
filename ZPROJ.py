@@ -1,4 +1,4 @@
-#ZPROJ PY
+#ZPROJ PY V0.01
 
 import time
 import os
@@ -80,6 +80,10 @@ def load_assets():
                 value = SOUND(updated_asset_path)
             Assets[updated_asset_name] = value
 
+# A Sprite is based on pygame sprites, and contains basic hooks to do with inputs and mouse movements.
+# It also positions the center of itself based on x and y attributes it holds, and can use camera scrolling.
+# Sprites will inherit certain properties that every game object should have, "sprite_attributes" in storage.
+
 class sprite(pygame.sprite.Sprite):
     def update_image(self,image:str):
         try:
@@ -89,31 +93,41 @@ class sprite(pygame.sprite.Sprite):
             print(f"⚠ COULD NOT LOAD IMAGE ASSET {image} ⚠")
         self.image = TRANSFORM.scale(loaded_surface,self.size)
         self.rect = self.image.get_rect()
-        self.update()
 
     def __init__(self,coordinates:tuple=(0,0)):
+        # This has all the default sprite functions. The attributes are loaded separately under each sprite class' init.
         super().__init__()
-        self.x = coordinates[0]
-        self.y = coordinates[1]
-        self.size = tuple(self.stat_table["default_size"])
-        self.update_image(self.stat_table["default_sprite"])
-
-class npc(sprite):
-  
-    def __init__(self,sprite_type:str="gunner",coordinates:tuple=(0,0)):
-        super().__init__()
-        self.stat_table = NPC_STATS[sprite_type]
-        self.x = coordinates[0]
-        self.y = coordinates[1]
-        self.size = tuple(self.stat_table["default_size"])
-        self.update_image(self.stat_table["default_sprite"])
+        self.x:float = coordinates[0]
+        self.y:float = coordinates[1]
+        self.stat_table:dict # Define stat table so it's not annoying
+        self.sprite_attributes:dict = self.stat_table["sprite_attributes"]
+        self.size:tuple = tuple(self.sprite_attributes["default_size"])
+        self.scrolling_object:bool = self.sprite_attributes["can_scroll"]
+        # Run any initialization functions
+        self.update_image(self.sprite_attributes["default_sprite"])
 
     def update(self):
-        self.rect.centerx = self.x - Cam_X
-        self.rect.centery = self.y - Cam_Y
-
-    def clicked(self):
+        self.rect.centerx = self.x - Cam_X if self.scrolling_object else 0
+        self.rect.centery = self.y - Cam_Y if self.scrolling_object else 0
+    
+    # These are hook methods called during runtime
+    def mouse_down(self):
+        pass 
+    def mouse_hovered(self):
         pass
+
+class npc(sprite):
+    def __init__(self,sprite_type:str="gunner",coordinates:tuple=(0,0)):
+        # Gather Stats
+        self.stat_table:dict = NPC_STATS[sprite_type] # HARD-TIED TABLE CONSTANT TO NPC CLASS
+        self.npc_stats:dict = self.stat_table["npc_attributes"]
+        super().__init__(coordinates=coordinates) # Initiate Default Sprite Behavior stat table is set
+
+        self.npc_name = sprite_type
+        self.npc_type = self.npc_stats["npc_type"]
+    
+    def mouse_hovered(self):
+        print(f"Mouse hover on {self.npc_name}")
 
 # Active Runtime
 
@@ -139,6 +153,9 @@ while Running:
             elif event.type == pygame.MOUSEMOTION:
                 mouse_coordinate:tuple = event_dict["pos"]
                 for object in active_objects:
+                    object:sprite
+                    if RECT.collidepoint(object.rect,mouse_coordinate[0],mouse_coordinate[1]):
+                        object.mouse_hovered()
                     
                 
     Active_Game_Objects.update()

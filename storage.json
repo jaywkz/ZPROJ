@@ -2,9 +2,14 @@
     "Stats":{
         "npc":{
             "gunner":{
-                "npc_type":"unit",
-                "default_sprite":"gunner",
-                "default_size":[50,50]
+                "sprite_attributes":{
+                    "default_sprite":"gunner",
+                    "default_size":[50,50],
+                    "can_scroll":true 
+                },
+                "npc_attributes":{
+                    "npc_type":"unit"
+                }
             }
         }
     },
