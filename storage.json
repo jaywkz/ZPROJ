@@ -1,19 +1,42 @@
 {
+    "Default_Gamerules":{
+        "Keybinds":{
+            "cam_forward":"w",
+            "cam_left":"a",
+            "cam_right":"d",
+            "cam_back":"s"
+        },
+        "Default_Object_Friction":6,
+        "Velocity_Minimum":0.5,
+        "Camera_Maximum_Speed":40,
+        "Camera_Speed":6,
+        "Camera_Friction":30
+    },
     "Stats":{
         "npc":{
             "gunner":{
                 "sprite_attributes":{
                     "default_sprite":"gunner",
                     "default_size":[50,50],
-                    "can_scroll":true 
+                    "can_scroll":true, 
+                    "start_anchored":false,
+                    "start_visible":true
                 },
                 "npc_attributes":{
                     "npc_type":"unit"
                 }
             }
+        },
+        "regular":{
+            "default_sprite":"gunner",
+            "default_size":[50,50],
+            "can_scroll":true, 
+            "start_anchored":false,
+            "start_visible":true
         }
     },
     "Solid_Colors":{
-        "background":[0,0,0]
+        "background":[0,10,0]
     }
+
 }
